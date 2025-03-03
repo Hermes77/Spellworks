@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #SpellSearchbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+        }
+
+
+        #spell-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spell-card {
+            flex: 1 1 250px; /* Grow/shrink but never go below 250px */
+            max-width: 300px;
+        }
+
+        .spell-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .spell-detail {
+            margin: 10px 0;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div id="SpellSearchbar">
+    <form onsubmit="search_spell(event)">
+        <input type="text" id="SpellSearch" name="SpellSearch"><br>
+        <input type="submit" hidden>
+    </form>
+</div>
+    <div id="spell-container"></div>
+    <script>
+        async function loadSpell() {
+            try {
+                const spell = await window.pywebview.api.get_spell(); // Call Python API
+                console.log(spell)
+                if (!spell || spell.error) {
+                    document.getElementById("spell-name").textContent = "No spell found";
+                    return;
+                }
+
+                document.getElementById("spell-name").textContent = spell.Spell;
+                document.getElementById("range").textContent = spell.range;
+                document.getElementById("components").textContent = spell.components;
+                document.getElementById("duration").textContent = spell.duration;
+            } catch (error) {
+                console.error("Error fetching spell:", error);
+                document.getElementById("spell-name").textContent = "Error loading spell";
+            }
+        }
+        // Load a spell on page load
+        // loadSpell();
+        async function search_spell(event){
+           try {
+                event.preventDefault();
+
+                var spellSearch = document.getElementById("SpellSearch").value;
+                const spells = await window.pywebview.api.search_spell(spellSearch); // Call Python API
+                console.log(spells)
+
+                if (!spells || spells.error) {
+                    document.getElementById("spell-name").textContent = "No spell found";
+                    return;
+                }
+
+                // Clear existing spell cards
+                document.getElementById("spell-container").innerHTML = "";
+
+                spells.forEach(spell => {
+                const spellCard = document.createElement("div");
+                spellCard.classList.add("spell-card");
+
+                spellCard.innerHTML = `
+                    <div class="spell-name"><strong>${spell.Spell}</strong></div>
+                    <div class="spell-detail"><strong>Casting Time:</strong> <span>${spell.Casting_Time || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Range:</strong> <span>${spell.Range || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Components:</strong> <span>${spell.Components || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Duration:</strong> <span>${spell.Duration || "N/A"}</span></div>
+                `;
+
+                // Append the new spell card to the container
+                document.getElementById("spell-container").appendChild(spellCard);
+            });
+            } catch (error) {
+                console.error("Error fetching spell:", error);
+                document.getElementById("spell-container").textContent = "Error loading spell".appendChild(spellCard);
+            }
+        }
+    </script>
+</body>
+</html>
