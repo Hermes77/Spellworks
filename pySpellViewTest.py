@@ -1,11 +1,53 @@
 import sqlite3
-
+import pandas as pd
 import webview
+# TODO
+#   - Setup spellFilter to work with Javascript( more efficent)
+#   - See if can make character page all in one html and then use tabs
 
 
 class SpellAPI:
-    """ This class provides spell data to the web UI via PyWebview. """
-    def search_spell(self, spell):
+
+    def spellFilter(self, spell):
+
+        conn = sqlite3.connect("Spells.db")  # Ensure this is your database
+        cursor = conn.cursor()
+
+        columns = cursor.execute("PRAGMA table_info(spells);")
+        spell_columns = [col[1] for col in columns if col[1].startswith("Spell_lists")]
+
+        # Construct the WHERE clause to check if any of the columns contain "Druid"
+        search_clause = " OR ".join([f"LOWER({col}) LIKE '%" + spell.spell_list + "%' " for col in spell_columns])
+        search_clause = f"({search_clause})AND LOWER(Level) LIKE '%" +spell.level + "%'"
+        search_clause = f"({search_clause})AND LOWER(Spell) LIKE ''%" + spell.spell + "%''"
+        search_clause = f"({search_clause})AND LOWER(Spell) LIKE ''%" + spell.source + "%''"
+        search_clause = f"({search_clause})AND LOWER(Spell) LIKE ''%" + spell.school + "%''"
+
+        # Construct the SQL query to select rows where any of the "Spell lists" columns contain "Druid"
+        query = f"SELECT * FROM Spells WHERE {search_clause};"
+
+
+        df = pd.read_sql(query, conn)
+        conn.close()
+        print(df)
+        return df.to_dict('records')
+
+
+    def list_Spells(self):
+        conn = sqlite3.connect("Spells.db")  # Ensure this is your database
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT Spell FROM Spells;")
+        spell = cursor.fetchall()
+
+        conn.close()
+        if spell:
+            return [dict(n) for n in spell]
+        else:
+            return [{'error':"No Spells Found"}]
+
+    def search_spell(self, spell,amountOfSpells):
         conn = sqlite3.connect("spells.db")  # Ensure this is your database
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
@@ -15,9 +57,12 @@ class SpellAPI:
 
         conn.close()
         if spell:
-            return [dict(n) for n in spell]
+            if amountOfSpells == 1:
+                return [dict(spell[0])]
+            elif amountOfSpells == -1:
+                return [dict(n) for n in spell]
         else:
-            return [{f"No Spells Found with the name {spell}"}]
+            return [{'error':"No Spells Found"}]
 
     def get_spell(self):
         """ Fetches a random spell from SQLite and returns it. """
@@ -40,13 +85,9 @@ class SpellAPI:
         return {"error": "No spell found"}
 
 
-# Create an API instance
-api = SpellAPI()
-
-# pprint(api.search_spell("thunder"))
-
-# Start PyWebview with API access
-webview.create_window("Spell Display", "spellDisplay.html", js_api=api)
-webview.start()
+if __name__ == '__main__':
+    api = SpellAPI()
+    webview.create_window("Spell Display", "templates/spellDisplayV2.html", js_api=api)
+    webview.start(debug=False)
 
 

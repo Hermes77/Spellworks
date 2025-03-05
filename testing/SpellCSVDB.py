@@ -3,11 +3,11 @@ import sqlite3
 import pandas as pd
 
 # Load the CSV file into a pandas DataFrame
-csv_file = 'SpellData.csv'  # Replace with your CSV file path
+csv_file = '../SpellData.csv'  # Replace with your CSV file path
 df = pd.read_csv(csv_file)
 
 # Connect to the SQLite database (it will create the database if it doesn't exist)
-db_file = 'Spells.db'  # Replace with your SQLite database file
+db_file = '../Spells.db'  # Replace with your SQLite database file
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 

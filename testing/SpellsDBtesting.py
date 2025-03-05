@@ -3,7 +3,7 @@ import textwrap
 
 import pandas as pd
 
-with sqlite3.connect('spells.db') as connection:
+with sqlite3.connect('../Spells.db') as connection:
     cursor = connection.cursor()
 
     columns = cursor.execute("PRAGMA table_info(spells);")
