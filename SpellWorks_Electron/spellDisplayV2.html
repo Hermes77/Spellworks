@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="spellViews.css">
+    <title>SpellDisplay</title>
+</head>
+<body>
+<div id="spell-container"></div>
+<div id="SpellDisplay"></div>
+<div id="FilterSpell">
+    <div id="SpellSearchbar">
+        <form onsubmit="search_spell(
+                                event,document.getElementById('SpellSearch').value,'spell-container',-1)">
+
+            <input type="text" id="SpellSearch" name="SpellSearch"><br>
+            <input type="submit" hidden>
+        </form>
+    </div>
+</div>
+<label id="errorlabel"></label>
+
+<script src="SpellWorks.js"></script>
+</body>
+</html>
