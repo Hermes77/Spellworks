@@ -3,7 +3,7 @@ async function list_spell(event) {
         // event.preventDefault();
 
         const spells = await window.api.getEntries();
-        console.log(spells)
+        // console.log(spells)
 
         if (!spells || spells.error) {
             document.getElementById("spell-name").textContent = "No spell found";
@@ -48,8 +48,8 @@ async function search_spell(event, spellSearch, toWriteTo, amt) {
     try {
         event.preventDefault();
 
-        const spells = await window.api.SearchSpells(spellSearch); // Call Python API
-        console.log(spells)
+        const spells = await window.api.SearchSpellsCard(spellSearch); // Call Python API
+        // console.log(spells)
 
         if (!spells || spells.error) {
             document.getElementById("spell-name").textContent = "No spell found";
@@ -83,3 +83,16 @@ async function search_spell(event, spellSearch, toWriteTo, amt) {
         console.error("Error fetching spell:", error);
     }
 }
+    function convertToJson() {
+        let form = document.getElementById("SpellFilterOptions");
+        let formData = {};
+        for (let i = 0; i < form.elements.length; i++) {
+            let element = form.elements[i];
+            if (element.type !== "button") {
+                formData[element.name] = element.value;
+            }
+        }
+        let jsonData = JSON.stringify(formData);
+        let jsonOutput = document.getElementById("jsonOutput");
+        jsonOutput.innerHTML = "<pre>" + jsonData + "</pre>";
+    }

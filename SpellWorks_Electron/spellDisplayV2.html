@@ -10,15 +10,48 @@
 <div id="spell-container"></div>
 <div id="SpellDisplay"></div>
 <div id="FilterSpell">
-    <div id="SpellSearchbar">
-        <form onsubmit="search_spell(
-                                event,document.getElementById('SpellSearch').value,'spell-container',-1)">
-
-            <input type="text" id="SpellSearch" name="SpellSearch"><br>
-            <input type="submit" hidden>
-        </form>
-    </div>
+    <form id="SpellFilterOptions" >
+        <select name="Level" id="Level">
+            <option value="">All</option>
+            <option value="Cantrip">Cantrip</option>
+            <option value="1">1st Level</option>
+            <option value="2">2nd Level</option>
+            <option value="3">3rd Level</option>
+            <option value="4">4th Level</option>
+            <option value="5">5th Level</option>
+            <option value="6">6th Level</option>
+            <option value="7">7th Level</option>
+            <option value="8">8th Level</option>
+            <option value="9">9th Level</option>
+        </select>
+        <select name="School" id="School">
+            <option value="">All</option>
+            <option value="Abjuration">Abjuration</option>
+            <option value="Conjuration">Conjuration</option>
+            <option value="Divination">Divination</option>
+            <option value="Enchantment">Enchantment</option>
+            <option value="Evocation">Evocation</option>
+            <option value="Illusion">Illusion</option>
+            <option value="Necromancy">Necromancy</option>
+            <option value="Transmutation">Transmutation</option>
+        </select>
+        <select name="Class" id="Class">
+            <option value="">All</option>
+            <option value="Bard">Bard</option>
+            <option value="Cleric">Cleric</option>
+            <option value="Druid">Druid</option>
+            <option value="Paladin">Paladin</option>
+            <option value="Ranger">Ranger</option>
+            <option value="Sorcerer">Sorcerer</option>
+            <option value="Warlock">Warlock</option>
+            <option value="Wizard">Wizard</option>
+        </select>
+        <input type="search" id="Spell" name="Spell"><br>
+        <button type="button" form="SpellFilterOptions" onclick="convertToJson()">Filter</button>
+       </form>
+<div id="jsonOutput"></div>
 </div>
+
 <label id="errorlabel"></label>
 
 <script src="SpellWorks.js"></script>

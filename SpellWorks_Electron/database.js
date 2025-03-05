@@ -19,7 +19,7 @@ function getEntries(callback){
       });
     }
 
-function SearchSpells(spell,callback){
+function SearchSpellsCard(spell,callback){
     db.all("SELECT * FROM Spells WHERE LOWER(spell) LIKE '%" + spell + "%'", [], (err, rows) => {
         if (err) {
           console.error("Error fetching entries:", err);
