@@ -5,7 +5,7 @@ const { getEntries,FilterSpells,SearchSpellsCard } = require('./database')
 
 const createWindow = () => {
   const win = new BrowserWindow({
-    width: 800,
+    width: 900,
     height: 600,
     webPreferences:{
         nodeIntegration: true,

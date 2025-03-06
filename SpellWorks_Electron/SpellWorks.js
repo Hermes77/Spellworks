@@ -2,12 +2,21 @@ function spellLister(spells){
  // Clear existing spell cards
  document.getElementById("spell-container").innerHTML = "";
 
+//  const header = document.createElement("div");
+//  header.classList.add( "spell-header");
+//  header.innerHTML = `<span class="spell-name-list">Spell</span><span class="spell-level-list">Level</span>`;
+//  document.getElementById("spell-container").appendChild(header);
+
+
  spells.forEach(spell => {
      const spellentry = document.createElement("div");
      spellentry.classList.add("spell-entry");
+     spellentry.setAttribute("onclick", `search_spell(event, "${spell.Spell}", 'SpellDisplay')`);
 
-     spellentry.innerHTML = `<div class="spell-name" data-spell="${spell.Spell}" onclick="search_spell(
-                                            event, this.getAttribute('data-spell'),'SpellDisplay')"><strong>${spell.Spell}</strong></div>`;
+     spellentry.innerHTML = `
+                    <span class="spell-name-list">${spell.Spell}</span>
+                    <span class="spell-info-list">${spell.Level}</span>
+                    <span class="spell-info-list">${spell.Range}</span>`;
 
      // Append the new spell card to the container
      document.getElementById("spell-container").appendChild(spellentry);

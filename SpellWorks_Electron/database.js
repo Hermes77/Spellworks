@@ -9,7 +9,7 @@ const db = new sqlite3.Database("../Spells.db", (err) => {
 });
 
 function getEntries(callback){
-    db.all('SELECT Spell,"Casting Time" FROM Spells', [], (err, rows) => {
+    db.all('SELECT Spell,Level,Range FROM Spells', [], (err, rows) => {
         if (err) {
           console.error("Error fetching entries:", err);
           callback([]);
@@ -37,7 +37,7 @@ function FilterSpells(filterDict, callback) {
     searchClause = `(${searchClause}) AND LOWER(School) LIKE '%${filterDict.School}%'`;
 
     db.all(
-      `SELECT Spell FROM Spells WHERE ${searchClause}`,
+      `SELECT Spell,Level,Range FROM Spells WHERE ${searchClause}`,
       [],
       (err, rows) => {
         if (err) {
