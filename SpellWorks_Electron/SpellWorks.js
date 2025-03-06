@@ -1,3 +1,20 @@
+function spellLister(spells){
+ // Clear existing spell cards
+ document.getElementById("spell-container").innerHTML = "";
+
+ spells.forEach(spell => {
+     const spellentry = document.createElement("div");
+     spellentry.classList.add("spell-entry");
+
+     spellentry.innerHTML = `<div class="spell-name" onclick="search_spell(
+                                            event,'${spell.Spell}','SpellDisplay')"><strong>${spell.Spell}</strong></div>`;
+
+     // Append the new spell card to the container
+     document.getElementById("spell-container").appendChild(spellentry);
+ });
+}
+
+
 async function list_spell(event) {
     try {
         // event.preventDefault();
@@ -9,20 +26,7 @@ async function list_spell(event) {
             document.getElementById("spell-name").textContent = "No spell found";
             return;
         }
-
-        // Clear existing spell cards
-        document.getElementById("spell-container").innerHTML = "";
-
-        spells.forEach(spell => {
-            const spellentry = document.createElement("div");
-            spellentry.classList.add("spell-entry");
-
-            spellentry.innerHTML = `<div class="spell-name" onclick="search_spell(
-                                                   event,'${spell.Spell}','SpellDisplay',1)"><strong>${spell.Spell}</strong></div>`;
-
-            // Append the new spell card to the container
-            document.getElementById("spell-container").appendChild(spellentry);
-        });
+        spellLister(spells);       
     } catch (error) {
         console.error("Error fetching spell:", error);
         document.getElementById("errorlabel").textContent = "Error loading spell";
@@ -44,7 +48,7 @@ function getSpellLists(spell) {
     return Classes;
 }
 
-async function search_spell(event, spellSearch, toWriteTo, amt) {
+async function search_spell(event, spellSearch, toWriteTo) {
     try {
         event.preventDefault();
 
@@ -83,16 +87,30 @@ async function search_spell(event, spellSearch, toWriteTo, amt) {
         console.error("Error fetching spell:", error);
     }
 }
-    function convertToJson() {
+    async function SpellFilter() {
         let form = document.getElementById("SpellFilterOptions");
         let formData = {};
         for (let i = 0; i < form.elements.length; i++) {
             let element = form.elements[i];
             if (element.type !== "button") {
-                formData[element.name] = element.value;
+                formData[element.name] = element.value ?? " ";
             }
         }
         let jsonData = JSON.stringify(formData);
-        let jsonOutput = document.getElementById("jsonOutput");
-        jsonOutput.innerHTML = "<pre>" + jsonData + "</pre>";
+        console.log(jsonData);
+        try{
+        const spells = await window.api.FilterSpells(formData);
+
+        if (!spells || spells.error) {
+            document.getElementById("spell-name").textContent = "No spell found";
+            return;
+        }
+        console.log(spells);
+
+        spellLister(spells);
+
+    }catch (error) {
+        console.error("Error fetching spell:", error);
+        document.getElementById("errorlabel").textContent = "Error loading spell";
+    }
     }

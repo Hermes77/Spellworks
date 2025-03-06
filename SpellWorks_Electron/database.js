@@ -19,6 +19,41 @@ function getEntries(callback){
       });
     }
 
+function FilterSpells(filterDict, callback) {
+  db.all("PRAGMA table_info(spells);", [], (err, columns) => {
+    if (err) {
+      console.error("Error fetching table info:", err);
+      callback([]); // Ensure callback is called even on error
+      return;
+    }
+    
+    const columnNames = columns.map(col => col.name);
+    const spellColumns = columnNames.filter(col => col.startsWith("Spell_lists"));
+
+    console.log("filterDict:", filterDict);
+
+    let searchClause = spellColumns.map(col => `LOWER(${col}) LIKE '%${filterDict.Class}%'`).join(" OR ");
+    searchClause = `(${searchClause}) AND LOWER(Level) LIKE '%${filterDict.Level}%'`;
+    searchClause = `(${searchClause}) AND LOWER(Spell) LIKE '%${filterDict.Spell}%'`;
+    searchClause = `(${searchClause}) AND LOWER(School) LIKE '%${filterDict.School}%'`;
+
+    console.log("Search clause:", searchClause);
+
+    db.all(
+      `SELECT Spell FROM Spells WHERE ${searchClause}`,
+      [],
+      (err, rows) => {
+        if (err) {
+          console.error("Error fetching entries:", err);
+          callback([]);
+        } else {
+          callback(rows);
+        }
+      }
+    );
+  });
+}
+
 function SearchSpellsCard(spell,callback){
     db.all("SELECT * FROM Spells WHERE LOWER(spell) LIKE '%" + spell + "%'", [], (err, rows) => {
         if (err) {
@@ -32,4 +67,4 @@ function SearchSpellsCard(spell,callback){
 }
 
 
-module.exports = { getEntries,SearchSpells};
+module.exports = { getEntries,FilterSpells,SearchSpellsCard};

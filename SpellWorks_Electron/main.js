@@ -1,7 +1,6 @@
 const { app, BrowserWindow,ipcMain } = require('electron')
 const path = require('node:path')
-
-const { getEntries,SearchSpellsCard } = require('./database')
+const { getEntries,FilterSpells,SearchSpellsCard } = require('./database')
 
 
 const createWindow = () => {
@@ -25,6 +24,11 @@ ipcMain.handle("get-entries", async () => {
   ipcMain.handle("Search-Spells-Card", async (_,spell) => {
     return new Promise((resolve) => {
       SearchSpellsCard(spell,resolve);
+    });
+  });
+  ipcMain.handle("Filter-Spells", async (_,filterDict) => {
+    return new Promise((resolve) => {
+      FilterSpells(filterDict,resolve);
     });
   });
 
