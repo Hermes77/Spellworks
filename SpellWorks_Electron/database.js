@@ -9,7 +9,7 @@ const db = new sqlite3.Database("../Spells.db", (err) => {
 });
 
 function getEntries(callback){
-    db.all("SELECT Spell FROM Spells", [], (err, rows) => {
+    db.all('SELECT Spell,"Casting Time" FROM Spells', [], (err, rows) => {
         if (err) {
           console.error("Error fetching entries:", err);
           callback([]);
@@ -30,14 +30,11 @@ function FilterSpells(filterDict, callback) {
     const columnNames = columns.map(col => col.name);
     const spellColumns = columnNames.filter(col => col.startsWith("Spell_lists"));
 
-    console.log("filterDict:", filterDict);
 
     let searchClause = spellColumns.map(col => `LOWER(${col}) LIKE '%${filterDict.Class}%'`).join(" OR ");
     searchClause = `(${searchClause}) AND LOWER(Level) LIKE '%${filterDict.Level}%'`;
     searchClause = `(${searchClause}) AND LOWER(Spell) LIKE '%${filterDict.Spell}%'`;
     searchClause = `(${searchClause}) AND LOWER(School) LIKE '%${filterDict.School}%'`;
-
-    console.log("Search clause:", searchClause);
 
     db.all(
       `SELECT Spell FROM Spells WHERE ${searchClause}`,
@@ -55,12 +52,12 @@ function FilterSpells(filterDict, callback) {
 }
 
 function SearchSpellsCard(spell,callback){
-    db.all("SELECT * FROM Spells WHERE LOWER(spell) LIKE '%" + spell + "%'", [], (err, rows) => {
+    db.get("SELECT * FROM Spells WHERE LOWER(spell) LIKE ?", ['%' + spell + '%'], (err, row) => {
         if (err) {
           console.error("Error fetching entries:", err);
           callback([]);
         } else {
-          callback(rows);
+          callback(row);
         }
     });
 

@@ -6,8 +6,8 @@ function spellLister(spells){
      const spellentry = document.createElement("div");
      spellentry.classList.add("spell-entry");
 
-     spellentry.innerHTML = `<div class="spell-name" onclick="search_spell(
-                                            event,'${spell.Spell}','SpellDisplay')"><strong>${spell.Spell}</strong></div>`;
+     spellentry.innerHTML = `<div class="spell-name" data-spell="${spell.Spell}" onclick="search_spell(
+                                            event, this.getAttribute('data-spell'),'SpellDisplay')"><strong>${spell.Spell}</strong></div>`;
 
      // Append the new spell card to the container
      document.getElementById("spell-container").appendChild(spellentry);
@@ -63,26 +63,24 @@ async function search_spell(event, spellSearch, toWriteTo) {
         // Clear existing spell cards
         document.getElementById(toWriteTo).innerHTML = "";
 
-        spells.forEach(spell => {
             const spellCard = document.createElement("div");
             spellCard.classList.add("spell-card");
 
             spellCard.innerHTML = `
-                    <div class="spell-name"><strong>${spell.Spell}</strong></div>
-                    <div class="spell-level"><strong>${spell.Level}</strong></div>
-                    <div class="spell-detail"><strong>Source:</strong> <span>${spell.Source || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Casting Time:</strong> <span>${spell['Casting Time'] || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Range:</strong> <span>${spell.Range || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>School:</strong> <span>${spell.School || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Components:</strong> <span>${spell.Components || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Duration:</strong> <span>${spell.Duration || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Description:</strong> <span>${spell.Description || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Classes:</strong> <span>${getSpellLists(spell)}</span></div><br>
+                    <div class="spell-name"><strong>${spells.Spell}</strong></div>
+                    <div class="spell-level"><strong>${spells.Level}</strong></div>
+                    <div class="spell-detail"><strong>Source:</strong> <span>${spells.Source || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Casting Time:</strong> <span>${spells['Casting Time'] || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Range:</strong> <span>${spells.Range || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>School:</strong> <span>${spells.School || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Components:</strong> <span>${spells.Components || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Duration:</strong> <span>${spells.Duration || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Description:</strong> <span>${spells.Description || "N/A"}</span></div>
+                    <div class="spell-detail"><strong>Classes:</strong> <span>${getSpellLists(spells)}</span></div><br>
                 `;
 
             // Append the new spell card to the container
             document.getElementById(toWriteTo).appendChild(spellCard);
-        });
     } catch (error) {
         console.error("Error fetching spell:", error);
     }
@@ -114,3 +112,26 @@ async function search_spell(event, spellSearch, toWriteTo) {
         document.getElementById("errorlabel").textContent = "Error loading spell";
     }
     }
+
+
+    const filterOptions = {
+        Level: ["", "Cantrip", "1st Level", "2nd Level", "3rd Level", "4th Level", "5th Level", "6th Level", "7th Level", "8th Level", "9th Level"],
+        School: ["", "Abjuration", "Conjuration", "Divination", "Enchantment", "Evocation", "Illusion", "Necromancy", "Transmutation"],
+        Class: ["", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Warlock", "Wizard"]
+    };
+
+    // Function to generate select options
+    function populateSelectOptions() {
+        for (const [key, values] of Object.entries(filterOptions)) {
+            const select = document.getElementById(key);
+            values.forEach(value => {
+                const option = document.createElement("option");
+                option.value = value.replace(/ Level$/, "").toLowerCase(); // Normalize values
+                option.textContent = value || "All"; // Display "All" text if value is empty
+                select.appendChild(option);
+            });
+        }
+    }
+
+    // Populate select elements on page load
+    document.addEventListener("DOMContentLoaded", populateSelectOptions);

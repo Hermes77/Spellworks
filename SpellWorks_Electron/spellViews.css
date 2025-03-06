@@ -40,9 +40,10 @@ body {
     justify-content: center;
 }
 
-.spell-card {
-}
 
 .spell-entry:hover {
     background-color: white;
+    display: flex;
+    flex-direction: row;
+    gap: 10px 10px;
 }
