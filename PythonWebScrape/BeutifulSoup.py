@@ -98,9 +98,10 @@ testList=['/spell:acid-splash','/spell:alarm','/spell:antagonize','/spell:druidc
 spell_details = OrderedDict ({'Spell': '','Source':'', 'School': '','Level':'', 'Casting Time': '','Range':'','Components':'','Duration':'', 'Description': '', 'At Higher Levels': '','Spell lists': '','Link':'' })
 
 #for i in range(len(testList)):
-sourceURL = ('http://dnd5e.wikidot.com' + testList[5])
+sourceURL = ('http://dnd5e.wikidot.com' + testList[0])
 SpellUrlGet = requests.get(sourceURL)
 SpellContent = BeautifulSoup(SpellUrlGet.content, "html.parser")
 Spellinfolist = pull_spellinfo(SpellContent)
+print(Spellinfolist)
 #clean_spellinfo(Spellinfolist,spell_details)
 #print(spell_details)

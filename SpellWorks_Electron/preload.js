@@ -1,5 +1,5 @@
 const { contextBridge,ipcRenderer } = require('electron')
-const { getEntries, FilterSpells,SearchSpellsCard } = require('./database')
+const { getEntries, FilterSpells,SearchSpellsCard } = require('./database.js')
 
 
 contextBridge.exposeInMainWorld('api', {

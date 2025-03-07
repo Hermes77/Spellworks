@@ -5,14 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="spellViews.css">
     <link rel="stylesheet" href="tabs.css">
+    <link rel="stylesheet" href="characterSheet.css ">
     <title>SpellDisplay</title>
 </head>
 <body>
-    <!-- <div class="tab">
+    <div class="tab">
+        <button class="tablinks" onclick="opentab(event, 'CharacterTab')" id="defaultOpen">Characters</button>
         <button class="tablinks" onclick="opentab(event, 'SpellTab')">Spells</button>
-        <button class="tablinks" onclick="opentab(event, 'CharacterTab')">Characters</button>
+        <button class="tablinks" onclick="opentab(event, '')">Notes</button>
+        <button class="tablinks" onclick="opentab(event, '')">Archive</button>
         <script src="tabs.js"></script>
-      </div> -->
+      </div>
+
+
+<div id="CharacterTab" class="tabcontent">
+    <div id="CharacterBasicInfo"></div>
+    <div id="CharacterStats"></div>
+    <div id="CharacterSkills"></div>
+    <script src="CharacterWorks.js"></script>
+</div>
+    
+
 
 <div id="SpellTab" class="tabcontent">
     <div id="spell-container"></div>
@@ -26,9 +39,10 @@
             <button type="button" onclick="SpellFilter()">Filter</button>
             <button type="button" onclick="SpellFilterReset()">Reset</button>
         </form>
-
     </div>
-<script src="SpellWorks.js"></script>
+    <script src="SpellWorks.js"></script>
 </div>
+
+
 </body>
 </html>

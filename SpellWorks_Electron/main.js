@@ -1,6 +1,6 @@
 const { app, BrowserWindow,ipcMain } = require('electron')
 const path = require('node:path')
-const { getEntries,FilterSpells,SearchSpellsCard } = require('./database')
+const { getEntries,FilterSpells,SearchSpellsCard } = require('./database.js');
 const electronReload = require('electron-reload');
 
 electronReload(__dirname);

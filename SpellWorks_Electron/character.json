@@ -1,0 +1,26 @@
+{
+    "characterinfo":{
+    "Player_Name": "Phil",
+    "Character_Name": "Jimbo",
+    "Class": "Wizard",
+    "Level": 1,
+    "Race": "Human",
+    "Alignment": "Neutral Good",
+    "Background": "Sage",
+    "Experience": 0
+    },
+    "abilities": {
+        "Strength": 10,
+        "Dexterity": 14,
+        "Constitution": 12,
+        "Intelligence": 16,
+        "Wisdom": 13,
+        "Charisma": 11
+    },
+    "hit_points": 6,
+    "armor_class": 12,
+    "walkingspeed": 30,
+    "proficiencies": ["Arcana", "History"],
+    "equipment": ["Quarterstaff", "Spellbook", "Explorer's Pack"],
+    "spells": ["Magic Missile", "Mage Armor"]
+}

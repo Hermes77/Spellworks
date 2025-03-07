@@ -87,7 +87,7 @@ class SpellAPI:
 
 if __name__ == '__main__':
     api = SpellAPI()
-    webview.create_window("Spell Display", "templates/spellDisplayV2.html", js_api=api)
+    webview.create_window("Spell Display", "spellDisplayV2.html", js_api=api)
     webview.start(debug=False)
 
 
