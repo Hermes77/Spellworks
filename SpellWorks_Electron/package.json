@@ -13,6 +13,7 @@
     "electron": "^35.0.0"
   },
   "dependencies": {
+    "electron-reload": "^2.0.0-alpha.1",
     "spellworks_electron": "file:",
     "sqlite3": "^5.1.7"
   }

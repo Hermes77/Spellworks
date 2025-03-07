@@ -1,7 +1,9 @@
 const { app, BrowserWindow,ipcMain } = require('electron')
 const path = require('node:path')
 const { getEntries,FilterSpells,SearchSpellsCard } = require('./database')
+const electronReload = require('electron-reload');
 
+electronReload(__dirname);
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -35,6 +37,11 @@ ipcMain.handle("get-entries", async () => {
 app.whenReady().then(() => {
   createWindow()
 })
+
+if (module.hot) {
+  module.hot.accept();
+}
+
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
   })

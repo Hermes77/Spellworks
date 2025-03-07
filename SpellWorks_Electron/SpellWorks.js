@@ -2,10 +2,10 @@ function spellLister(spells){
  // Clear existing spell cards
  document.getElementById("spell-container").innerHTML = "";
 
-//  const header = document.createElement("div");
-//  header.classList.add( "spell-header");
-//  header.innerHTML = `<span class="spell-name-list">Spell</span><span class="spell-level-list">Level</span>`;
-//  document.getElementById("spell-container").appendChild(header);
+ const header = document.createElement("div");
+ header.classList.add( "spell-header");
+ header.innerHTML = `<span class="spell-name-list">Spell</span><span class="spell-info-list">Level</span><span class="spell-info-list">Range</span>`;
+ document.getElementById("spell-container").appendChild(header);
 
 
  spells.forEach(spell => {
@@ -141,6 +141,13 @@ async function search_spell(event, spellSearch, toWriteTo) {
             });
         }
     }
+
+    function SpellFilterReset(){
+        document.getElementById("SpellFilterOptions").reset();
+        SpellFilter();
+    }
+
+
 
     // Populate select elements on page load
     document.addEventListener("DOMContentLoaded", populateSelectOptions);
