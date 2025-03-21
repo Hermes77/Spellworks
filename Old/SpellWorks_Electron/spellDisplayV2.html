@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="spellViews.css">
+    <link rel="stylesheet" href="tabs.css">
+    <link rel="stylesheet" href="characterSheet.css ">
+    <title>SpellDisplay</title>
+</head>
+<body>
+    <div class="tab">
+        <button class="tablinks" onclick="opentab(event, 'CharacterTab')" id="defaultOpen">Characters</button>
+        <button class="tablinks" onclick="opentab(event, 'SpellTab')">Spells</button>
+        <button class="tablinks" onclick="opentab(event, '')">Notes</button>
+        <button class="tablinks" onclick="opentab(event, '')">Archive</button>
+        <script src="tabs.js"></script>
+      </div>
+
+
+<div id="CharacterTab" class="tabcontent">
+    <div id="CharacterBasicInfo"></div>
+    <div id="CharacterStats"></div>
+    <div id="CharacterSkills"></div>
+    <script src="CharacterWorks.ts"></script>
+</div>
+    
+
+
+<div id="SpellTab" class="tabcontent">
+    <div id="spell-container"></div>
+    <div id="SpellDisplay"></div>
+    <div id="FilterSpell">
+        <form id="SpellFilterOptions">
+            <select name="Level" id="Level"></select>
+            <select name="School" id="School"></select>
+            <select name="Class" id="Class"></select>
+            <input type="search" id="Spell" name="Spell" onkeydown="if(event.key === 'Enter'){ event.preventDefault(); SpellFilter(); }"><br>
+            <button type="button" onclick="SpellFilter()">Filter</button>
+            <button type="button" onclick="SpellFilterReset()">Reset</button>
+        </form>
+    </div>
+    <script src="SpellWorks.js"></script>
+</div>
+
+
+</body>
+</html>

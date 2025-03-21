@@ -1,1 +1,29 @@
-{}
+{
+  "name": "spellworks",
+  "version": "1.0.0",
+  "description": "Dnd sheet App",
+  "main": "build/main.js",
+  "scripts": {
+    "compile": "tsc && copyfiles -f src/index.html build",
+    "start": "npm run compile && electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hermes77/Spellworks.git"
+  },
+  "author": "Isaak Nathan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hermes77/Spellworks/issues"
+  },
+  "homepage": "https://github.com/Hermes77/Spellworks#readme",
+  "devDependencies": {
+    "@types/electron": "^1.4.38",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "electron-reload": "^2.0.0-alpha.1",
+    "sqlite3": "^5.1.7"
+  }
+}

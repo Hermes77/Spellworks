@@ -1,0 +1,90 @@
+#SpellTab{
+    margin: 0;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Left 2/3, Right 1/3 */
+    grid-template-rows: 2fr 1fr; /* Top content and bottom-left */
+    overflow:hidden;
+    gap: 10px;
+    cursor: default;
+    flex-grow: 5px;
+}
+
+#spell-container {
+    background-color: #807d7f;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto; 
+    overflow-x: hidden;
+    max-height: 100%; 
+    gap: 2px;
+}
+
+#SpellDisplay {
+    background-color: lightcoral;
+    overflow: auto;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    text-wrap: normal;
+}
+
+#FilterSpell {
+    background-color: lightgreen;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+}
+
+#SpellSearchbar {
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+}
+
+/* Table-like row structure */
+.spell-entry {
+    display: flex;
+    width: 100%;
+    border: 1px solid black;
+    background: white;
+}
+
+/* Table headers (optional) */
+.spell-header {
+    font-weight: bold;
+    background-color: lightgray;
+    display: flex;
+    justify-content: space-evenly;
+    position: sticky;
+    top: 0;
+    width: 100%;
+}
+
+/* Ensure each column aligns */
+.spell-entry > * {
+    padding: 5px 10px;
+    border-right: 1px solid black;
+    font: 12px georgia;
+}
+
+/* Set column widths to ensure alignment */
+.spell-name-list {
+    flex: 2;  /* Takes up remaining space */
+    text-align: left;
+    margin-left: 5px;
+}
+
+.spell-info-list {
+    flex: 1;
+    width: 60px; /* Fixed width for consistency */
+    text-align: left;
+}
+
+/* Hover effect for better visibility */
+.spell-entry:hover {
+    background-color: #f0f0f0;
+}
