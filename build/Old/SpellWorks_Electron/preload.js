@@ -1,11 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const { contextBridge, ipcRenderer } = require('electron');
-contextBridge.exposeInMainWorld('db', {
+const { getEntries, FilterSpells, SearchSpellsCard } = require('./database.js');
+contextBridge.exposeInMainWorld('api', {
     getEntries: () => ipcRenderer.invoke('get-entries'),
     SearchSpellsCard: (spell) => ipcRenderer.invoke('Search-Spells-Card', spell),
     FilterSpells: (filterDict) => ipcRenderer.invoke('Filter-Spells', filterDict)
-});
-contextBridge.exposeInMainWorld('json', {
-    fetchCharacterJSON: () => ipcRenderer.invoke('fetch-character-json')
 });

@@ -27,18 +27,7 @@ const skills = {
   Survival: "Wisdom",
 };
 
-async function fetchCharacterData() {
-  try {
-    const response = await fetch("character.json");
-    const data = response.json();
-    console.log(data);
 
-    return data;
-  } catch (error) {
-    console.error("Error fetching JSON:", error);
-    return null;
-  }
-}
 
 function DisplayCharData<T>(
   data: Record<string, T>,
@@ -63,7 +52,12 @@ function DisplayCharData<T>(
 
 async function fetchDisplayCharData() {
   try {
-    const data = await fetchCharacterData();
+      let data;
+      if (window.json && typeof window.json.fetchCharacterJSON === "function") {
+        data = await window.json.fetchCharacterJSON();
+      } else {
+        throw new Error("fetchCharacterJSON is not defined on window.json");
+      }
     if (!data) {
       return;
     }
@@ -114,3 +108,4 @@ async function fetchDisplayCharData() {
 }
 
 fetchDisplayCharData();
+

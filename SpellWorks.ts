@@ -1,27 +1,8 @@
-interface Spell {
-  Spell: string;
-  Level: number;
-  Range: string;
-  Source: string;
-  School: string;
-  Components: string;
-  Duration: string;
-  Description: string;
-  "Casting Time": string;
-  [key: string]: any;
-}
+
 
 interface APIResponse {
   error?: boolean;
   [key: string]: any;
-}
-
-interface Window {
-  api: {
-    getEntries: () => Promise<Spell[] | APIResponse>;
-    SearchSpellsCard: (spellSearch: string) => Promise<any>;
-    FilterSpells: (formData: Record<string, string>) => Promise<Spell[]>;
-  };
 }
 
 function spellLister(spells: Spell[]): void {
@@ -43,7 +24,7 @@ function spellLister(spells: Spell[]): void {
     spellentry.classList.add("spell-entry");
     spellentry.setAttribute(
       "onclick",
-      `search_spell(event, "${spell.Spell}", 'SpellDisplay')`
+      `search_spell("${spell.Spell}", 'SpellInfo')`
     );
 
     spellentry.innerHTML = `
@@ -60,7 +41,7 @@ function spellLister(spells: Spell[]): void {
 
 async function list_spell(): Promise<void> {
   try {
-    const spells: Spell[] | APIResponse = await window.api.getEntries();
+    const spells: Spell[] | APIResponse = await window.db.getEntries();
 
     if (!spells || (spells as APIResponse).error) {
       const spellNameElement = document.getElementById("spell-name");
@@ -94,19 +75,28 @@ function getSpellLists(spell: { [key: string]: string | null }): string[] {
   return Classes;
 }
 
-async function search_spell(
-  event: Event,
-  spellSearch: string,
-  toWriteTo: string
-): Promise<void> {
+async function fetchSpell(spellSearch: string): Promise<Spell | null> {
   try {
-    event.preventDefault();
+    const response: Spell | APIResponse = await window.db.SearchSpellsCard(spellSearch);
 
-    const spells: Spell | APIResponse = (await window.api.SearchSpellsCard(
-      spellSearch
-    )) as APIResponse; // Call the API to search for the spell
+    if (!response || (response as APIResponse).error) {
+      return null;
+    }
 
-    if (!spells || spells.error) {
+    return response as Spell;
+  } catch (error) {
+    console.error("Error fetching spell:", error);
+    return null;
+  }
+}
+
+
+function displaySpell(spell: Spell | null, toWriteTo: string): void {
+  const container = document.getElementById(toWriteTo);
+  if (container) {
+    container.innerHTML = "";
+
+    if (!spell) {
       const spellNameElement = document.getElementById("spell-name");
       if (spellNameElement) {
         spellNameElement.textContent = "No spell found";
@@ -114,52 +104,30 @@ async function search_spell(
       return;
     }
 
-    const container = document.getElementById(toWriteTo);
-    if (container) {
-      container.innerHTML = "";
+    const spellCard = document.createElement("div");
+    spellCard.setAttribute("id", "spell-card");
 
-      const spellCard = document.createElement("div");
-      spellCard.classList.add("spell-card");
+    spellCard.innerHTML = `
+                  <div class="spell-name"><strong>${spell.Spell}</strong></div>
+                  <div class="spell-level"><strong>${spell.Level}</strong></div>
+                  <div class="spell-detail"><strong>Source:</strong> <span>${spell.Source || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Casting Time:</strong> <span>${spell["Casting Time"] || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Range:</strong> <span>${spell.Range || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>School:</strong> <span>${spell.School || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Components:</strong> <span>${spell.Components || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Duration:</strong> <span>${spell.Duration || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Description:</strong> <span>${spell.Description || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Classes:</strong> <span>${getSpellLists(spell)}</span></div><br>
+              `;
 
-      spellCard.innerHTML = `
-                    <div class="spell-name"><strong>${
-                      (spells as Spell).Spell
-                    }</strong></div>
-                    <div class="spell-level"><strong>${
-                      (spells as Spell).Level
-                    }</strong></div>
-                    <div class="spell-detail"><strong>Source:</strong> <span>${
-                      (spells as Spell).Source || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>Casting Time:</strong> <span>${
-                      (spells as Spell)["Casting Time"] || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>Range:</strong> <span>${
-                      (spells as Spell).Range || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>School:</strong> <span>${
-                      (spells as Spell).School || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>Components:</strong> <span>${
-                      (spells as Spell).Components || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>Duration:</strong> <span>${
-                      (spells as Spell).Duration || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>Description:</strong> <span>${
-                      (spells as Spell).Description || "N/A"
-                    }</span></div>
-                    <div class="spell-detail"><strong>Classes:</strong> <span>${getSpellLists(
-                      spells as Spell
-                    )}</span></div><br>
-                `;
-
-      // Append the new spell card to the container
-      container.appendChild(spellCard);
-    }
-  } catch (error) {
-    console.error("Error fetching spell:", error);
+    // Append the new spell card to the container
+    container.appendChild(spellCard);
   }
+}
+
+async function search_spell(spellSearch: string, toWriteTo: string): Promise<void> {
+  const spell = await fetchSpell(spellSearch);
+  displaySpell(spell, toWriteTo);
 }
 async function SpellFilter() {
   let form = document.getElementById("SpellFilterOptions");
@@ -175,7 +143,7 @@ async function SpellFilter() {
     let jsonData = JSON.stringify(formData);
     console.log(jsonData);
     try {
-      const spells = await window.api.FilterSpells(formData);
+      const spells = await window.db.FilterSpells(formData);
 
       if (!spells || (spells as APIResponse).error) {
         const spellNameElement = document.getElementById("spell-name");
@@ -250,13 +218,13 @@ function populateSelectOptions() {
   }
 }
 
-function SpellFilterReset() {
-  const formElement = document.getElementById("SpellFilterOptions");
-  if (formElement && formElement instanceof HTMLFormElement) {
-    formElement.reset();
-  }
-  SpellFilter();
-}
+// function SpellFilterReset() {
+//   const formElement = document.getElementById("SpellFilterOptions");
+//   if (formElement && formElement instanceof HTMLFormElement) {
+//     formElement.reset();
+//   }
+//   SpellFilter();
+// }
 
 // Populate select elements on page load
 document.addEventListener("DOMContentLoaded", populateSelectOptions);

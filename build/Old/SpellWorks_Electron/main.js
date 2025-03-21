@@ -8,12 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
-const electronReload = require('electron-reload');
 const { getEntries, FilterSpells, SearchSpellsCard } = require('./database.js');
-const { fetchCharacterJSON } = require('./jsonFetch.js');
+const electronReload = require('electron-reload');
 electronReload(__dirname);
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -23,14 +21,11 @@ const createWindow = () => {
         minHeight: 600,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: true,
-            enableRemoteModule: true,
             preload: path.join(__dirname, 'preload.js')
         }
     });
     win.loadFile('spellDisplayV2.html');
 };
-// Extend the global Window interface
 ipcMain.handle("get-entries", () => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve) => {
         getEntries(resolve);
@@ -46,14 +41,12 @@ ipcMain.handle("Filter-Spells", (_, filterDict) => __awaiter(void 0, void 0, voi
         FilterSpells(filterDict, resolve);
     });
 }));
-ipcMain.handle("fetch-character-json", () => __awaiter(void 0, void 0, void 0, function* () {
-    return new Promise((resolve) => {
-        fetchCharacterJSON(resolve);
-    });
-}));
 app.whenReady().then(() => {
     createWindow();
 });
+if (module.hot) {
+    module.hot.accept();
+}
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin')
         app.quit();

@@ -14,15 +14,7 @@ function opentab(evt, cityName) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
     // Show the current tab, and add an "active" class to the button that opened the tab
-    const cityElement = document.getElementById(cityName);
-    if (cityElement) {
-        cityElement.style.display = "grid";
-    }
+    document.getElementById(cityName).style.display = "grid";
     evt.currentTarget.className += " active";
 }
-document.addEventListener("DOMContentLoaded", () => {
-    const defaultOpen = document.getElementById("defaultOpen");
-    if (defaultOpen) {
-        defaultOpen.click();
-    }
-});
+document.getElementById("defaultOpen").click();

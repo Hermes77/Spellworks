@@ -8,6 +8,7 @@ const db = new sqlite3.Database("Spells.db", (err: any) => {
   }
 });
 
+declare global {
 interface Spell {
   Spell: string;
   Level: number;
@@ -19,6 +20,15 @@ interface Spell {
   Description: string;
   "Casting Time": string;
   [key: string]: any;
+}
+  interface Window {
+      db: {
+        getEntries: () => Promise<Spell[] | Response>;
+        SearchSpellsCard: (spellSearch: string) => Promise<any>;
+        FilterSpells: (formData: Record<string, string>) => Promise<Spell[]>;
+      }
+    }
+  
 }
 
 export function getEntries(callback: (rows: Spell[]) => void): void {
@@ -88,7 +98,7 @@ export function SearchSpellsCard(
 ): void {
   db.get(
     "SELECT * FROM Spells WHERE LOWER(spell) LIKE ?",
-    ["%" + spell + "%"],
+    [spell],
     (err: Error | null, row: Spell | null) => {
       if (err) {
         console.error("Error fetching entries:", err);
@@ -99,5 +109,6 @@ export function SearchSpellsCard(
     }
   );
 }
+
 
 module.exports = { getEntries, FilterSpells, SearchSpellsCard };

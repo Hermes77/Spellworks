@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function calculateScore(value) {
     return Math.floor((value - 10) / 2);
 }
@@ -33,20 +34,6 @@ const skills = {
     Stealth: "Dexterity",
     Survival: "Wisdom",
 };
-function fetchCharacterData() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch("character.json");
-            const data = response.json();
-            console.log(data);
-            return data;
-        }
-        catch (error) {
-            console.error("Error fetching JSON:", error);
-            return null;
-        }
-    });
-}
 function DisplayCharData(data, parentId, entryClass, generateInnerHTML, extraProcessing) {
     const parentElement = document.getElementById(parentId);
     if (!parentElement)
@@ -64,7 +51,13 @@ function DisplayCharData(data, parentId, entryClass, generateInnerHTML, extraPro
 function fetchDisplayCharData() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const data = yield fetchCharacterData();
+            let data;
+            if (window.json && typeof window.json.fetchCharacterJSON === "function") {
+                data = yield window.json.fetchCharacterJSON();
+            }
+            else {
+                throw new Error("fetchCharacterJSON is not defined on window.json");
+            }
             if (!data) {
                 return;
             }

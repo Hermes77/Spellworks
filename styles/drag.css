@@ -1,0 +1,42 @@
+.DragInfo {
+    position: absolute;
+    z-index: 9;
+    bottom: 10px;
+    right: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+    display: none;
+    max-height: 50vh;
+    height: fit-content;
+    width: 50vh;
+    text-align: left;
+    font-size: calc(.5vw + 1vh);
+
+}
+  
+.Dragheader {
+    position:relative;
+    padding: 5px;
+    cursor: grab;
+    z-index: 10;
+    background-color: #a9bdce;
+    color: #fff;
+    font-weight: bold;
+    color: black;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-around;
+    gap: 3px;
+  }
+
+
+.DragContent{
+    display: block;
+    text-align: left;
+    overflow-y: auto;
+}
+.DragTitle{
+    flex:2;
+}

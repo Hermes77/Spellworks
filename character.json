@@ -22,5 +22,5 @@
     "walkingspeed": 30,
     "proficiencies": ["Arcana", "History"],
     "equipment": ["Quarterstaff", "Spellbook", "Explorer's Pack"],
-    "spells": ["Magic Missile", "Mage Armor"]
+    "spells": ["Magic Missile", "Mage Armor", "Fireball"]
 }

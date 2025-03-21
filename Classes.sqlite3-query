@@ -1,0 +1,19 @@
+-- database: ./Classes.db
+
+SELECT * FROM "table-name";
+CREATE TABLE class(
+    id INTEGER PRIMARY KEY,
+    class_name TEXT NOT NULL);
+
+CREATE TABLE levels(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    class_id INTEGER NOT NULL,
+    level INTEGER NOT NULL,
+    proficiency_bonus INTEGER NOT NULL,
+    features TEXT,  -- Comma-separated list of feature names
+    FOREIGN KEY (class_id) REFERENCES class(class_id),
+    UNIQUE(class_id, level)
+);
+
+INSERT INTO class(class_name) VALUES('Warlock');
+DROP TABLE levels;

@@ -6,12 +6,14 @@
     <link rel="stylesheet" href="./styles/spellViews.css">
     <link rel="stylesheet" href="./styles/tabs.css">
     <link rel="stylesheet" href="./styles/characterSheet.css ">
+    <link rel="stylesheet" href="./styles/drag.css">
+    <script>var exports = {};</script>
     <title>SpellDisplay</title>
 </head>
-<body style="height: calc(100vh - 10px); margin: 5px; display: flex; flex-direction: column; background-color:rgb(175, 168, 168);">
+<body style="height: calc(100vh - 10px); margin: 5px; display: flex; flex-direction: column; background-color:rgb(175, 168, 168); overflow: hidden; ">
     <div class="tab" style="flex-shrink: 0;">
         <button class="tablinks" onclick="opentab(event, 'CharacterTab')" id="defaultOpen">Characters</button>
-        <button class="tablinks" onclick="opentab(event, '')">Spells</button>
+        <button class="tablinks" onclick="opentab(event, 'CharacterSpellTab')">Spells</button>
         <button class="tablinks" onclick="opentab(event, '')">Notes</button>
         <button class="tablinks" onclick="opentab(event, 'SpellTab')">Archive</button>
         <script src="./build/tabs.js"></script>
@@ -23,16 +25,28 @@
     <div id="CharacterBasicInfo"></div>
     <div id="CharacterStats"></div>
     <div id="CharacterSkills"></div>
+    <div id="CharacterHealth"> CharacterHealth</div>
     <div id="CharacterActions">CharacterActions</div>
     <div id="CharacterEquipment">CharacterEquipment</div>
     <script src="./build/CharacterWorks.js"></script>
 </div>
     
+<div id="CharacterSpellTab" class="tabcontent">
+    <div id="CharacterSpellInfo"></div>
+    <div id ="CharacterSpellList"></div>
+    <div id="CharacterSpellDisplay"></div>
+    <script src="./build/CharacterSpellTab.js"></script>
+</div>
 
 
 <div id="SpellTab" class="tabcontent">
     <div id="spell-container"></div>
-    <div id="SpellDisplay"></div>
+    <div id="SpellDisplay">
+        <div id="SpellDisplayMenu">
+            <button type="button" onclick="createDrag()">Pin</button>
+        </div>
+        <div id="SpellInfo"></div>
+    </div>
     <div id="FilterSpell">
         <form id="SpellFilterOptions">
             <select name="Level" id="Level"></select>
@@ -46,6 +60,8 @@
     <script src="./build/SpellWorks.js"></script>
 </div>
 
-
+<div class="dragwindow" >
+     <script src="./build/Drag.js"></script>
+</div>
 </body>
 </html>

@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function spellLister(spells) {
     // Clear existing spell cards
     const spellContainer = document.getElementById("spell-container");
@@ -23,7 +24,7 @@ function spellLister(spells) {
     spells.forEach((spell) => {
         const spellentry = document.createElement("div");
         spellentry.classList.add("spell-entry");
-        spellentry.setAttribute("onclick", `search_spell(event, "${spell.Spell}", 'SpellDisplay')`);
+        spellentry.setAttribute("onclick", `search_spell("${spell.Spell}", 'SpellInfo')`);
         spellentry.innerHTML = `
                        <span class="spell-name-list">${spell.Spell}</span>
                        <span class="spell-info-list">${spell.Level}</span>
@@ -37,7 +38,7 @@ function spellLister(spells) {
 function list_spell() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const spells = yield window.api.getEntries();
+            const spells = yield window.db.getEntries();
             if (!spells || spells.error) {
                 const spellNameElement = document.getElementById("spell-name");
                 if (spellNameElement) {
@@ -69,42 +70,54 @@ function getSpellLists(spell) {
     console.log(Classes);
     return Classes;
 }
-function search_spell(event, spellSearch, toWriteTo) {
+function fetchSpell(spellSearch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            event.preventDefault();
-            const spells = (yield window.api.SearchSpellsCard(spellSearch)); // Call the API to search for the spell
-            if (!spells || spells.error) {
-                const spellNameElement = document.getElementById("spell-name");
-                if (spellNameElement) {
-                    spellNameElement.textContent = "No spell found";
-                }
-                return;
+            const response = yield window.db.SearchSpellsCard(spellSearch);
+            if (!response || response.error) {
+                return null;
             }
-            const container = document.getElementById(toWriteTo);
-            if (container) {
-                container.innerHTML = "";
-                const spellCard = document.createElement("div");
-                spellCard.classList.add("spell-card");
-                spellCard.innerHTML = `
-                    <div class="spell-name"><strong>${spells.Spell}</strong></div>
-                    <div class="spell-level"><strong>${spells.Level}</strong></div>
-                    <div class="spell-detail"><strong>Source:</strong> <span>${spells.Source || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Casting Time:</strong> <span>${spells["Casting Time"] || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Range:</strong> <span>${spells.Range || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>School:</strong> <span>${spells.School || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Components:</strong> <span>${spells.Components || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Duration:</strong> <span>${spells.Duration || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Description:</strong> <span>${spells.Description || "N/A"}</span></div>
-                    <div class="spell-detail"><strong>Classes:</strong> <span>${getSpellLists(spells)}</span></div><br>
-                `;
-                // Append the new spell card to the container
-                container.appendChild(spellCard);
-            }
+            return response;
         }
         catch (error) {
             console.error("Error fetching spell:", error);
+            return null;
         }
+    });
+}
+function displaySpell(spell, toWriteTo) {
+    const container = document.getElementById(toWriteTo);
+    if (container) {
+        container.innerHTML = "";
+        if (!spell) {
+            const spellNameElement = document.getElementById("spell-name");
+            if (spellNameElement) {
+                spellNameElement.textContent = "No spell found";
+            }
+            return;
+        }
+        const spellCard = document.createElement("div");
+        spellCard.setAttribute("id", "spell-card");
+        spellCard.innerHTML = `
+                  <div class="spell-name"><strong>${spell.Spell}</strong></div>
+                  <div class="spell-level"><strong>${spell.Level}</strong></div>
+                  <div class="spell-detail"><strong>Source:</strong> <span>${spell.Source || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Casting Time:</strong> <span>${spell["Casting Time"] || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Range:</strong> <span>${spell.Range || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>School:</strong> <span>${spell.School || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Components:</strong> <span>${spell.Components || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Duration:</strong> <span>${spell.Duration || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Description:</strong> <span>${spell.Description || "N/A"}</span></div>
+                  <div class="spell-detail"><strong>Classes:</strong> <span>${getSpellLists(spell)}</span></div><br>
+              `;
+        // Append the new spell card to the container
+        container.appendChild(spellCard);
+    }
+}
+function search_spell(spellSearch, toWriteTo) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const spell = yield fetchSpell(spellSearch);
+        displaySpell(spell, toWriteTo);
     });
 }
 function SpellFilter() {
@@ -123,7 +136,7 @@ function SpellFilter() {
             let jsonData = JSON.stringify(formData);
             console.log(jsonData);
             try {
-                const spells = yield window.api.FilterSpells(formData);
+                const spells = yield window.db.FilterSpells(formData);
                 if (!spells || spells.error) {
                     const spellNameElement = document.getElementById("spell-name");
                     if (spellNameElement) {
@@ -195,12 +208,12 @@ function populateSelectOptions() {
         });
     }
 }
-function SpellFilterReset() {
-    const formElement = document.getElementById("SpellFilterOptions");
-    if (formElement && formElement instanceof HTMLFormElement) {
-        formElement.reset();
-    }
-    SpellFilter();
-}
+// function SpellFilterReset() {
+//   const formElement = document.getElementById("SpellFilterOptions");
+//   if (formElement && formElement instanceof HTMLFormElement) {
+//     formElement.reset();
+//   }
+//   SpellFilter();
+// }
 // Populate select elements on page load
 document.addEventListener("DOMContentLoaded", populateSelectOptions);
