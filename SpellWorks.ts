@@ -1,12 +1,16 @@
-
+// TODO List
+// rewrite functions to be more efficent and clean
+// add more filter options
+// Put the returning list for {spellLister} in an list that can be searched through seperatly from calling the entire database
 
 interface APIResponse {
   error?: boolean;
   [key: string]: any;
 }
 
+
+
 function spellLister(spells: Spell[]): void {
-  // Clear existing spell cards
   const spellContainer = document.getElementById("spell-container");
   if (spellContainer) {
     spellContainer.innerHTML = "";

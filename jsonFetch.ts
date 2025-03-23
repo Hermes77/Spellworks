@@ -1,5 +1,8 @@
 import fs from 'fs'
-
+//TODO List
+// Put the entire json into a class that can be accessed by the entire program
+// Make the class a global variable that can be accessed by the entire program
+// put the fetch and store functions inside class
 
 declare global {
     interface Window {

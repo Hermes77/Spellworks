@@ -6,6 +6,8 @@
 	],
 	"settings": {
 		"explorer.compactFolders": true,
-		"explorer.sortOrder": "modified"
+		"explorer.sortOrder": "modified",
+		"todo-tree.tree.showBadges": true,
+		"todo-tree.tree.disableCompactFolders": true
 	}
 }

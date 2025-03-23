@@ -24,7 +24,10 @@ async function fetchCharSpellData() {
   };
   fetchCharSpellData();
 
-  async function fetchSpellData(spellSearch: string): Promise<Spell | null> {
+//TODO move Function
+// I think this function should be a wrapper function for SearchSpellsCard in database.ts
+
+  async function fetchSpellData(spellSearch: string): Promise<Spell | null> { 
     try {
       const response: Spell | Response = await window.db.SearchSpellsCard(spellSearch);
     console.log(response);

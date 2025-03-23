@@ -1,9 +1,7 @@
 import sqlite3
 import pandas as pd
 import webview
-# TODO
-#   - Setup spellFilter to work with Javascript( more efficent)
-#   - See if can make character page all in one html and then use tabs
+
 
 
 class SpellAPI:

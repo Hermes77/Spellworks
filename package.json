@@ -20,9 +20,11 @@
   "homepage": "https://github.com/Hermes77/Spellworks#readme",
   "devDependencies": {
     "@types/electron": "^1.4.38",
+    "electron": "^35.0.3",
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "electron-reload": "^2.0.0-alpha.1",
     "sqlite3": "^5.1.7"
   }
