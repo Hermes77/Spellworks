@@ -1,4 +1,8 @@
 "use strict";
+// TODO List
+// rewrite functions to be more efficent and clean
+// add more filter options
+// Put the returning list for {spellLister} in an list that can be searched through seperatly from calling the entire database
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -10,7 +14,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 function spellLister(spells) {
-    // Clear existing spell cards
     const spellContainer = document.getElementById("spell-container");
     if (spellContainer) {
         spellContainer.innerHTML = "";

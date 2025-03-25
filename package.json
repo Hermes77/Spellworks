@@ -26,6 +26,7 @@
   "dependencies": {
     "copyfiles": "^2.4.1",
     "electron-reload": "^2.0.0-alpha.1",
+    "spellworks": "file:",
     "sqlite3": "^5.1.7"
   }
 }

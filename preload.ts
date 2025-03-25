@@ -1,3 +1,4 @@
+// This file is loaded before the renderer process is loaded
 const { contextBridge,ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('db', {
@@ -6,6 +7,7 @@ contextBridge.exposeInMainWorld('db', {
   FilterSpells: (filterDict: any) => ipcRenderer.invoke('Filter-Spells', filterDict)
 })
 contextBridge.exposeInMainWorld('json', {
-  fetchCharacterJSON: () => ipcRenderer.invoke('fetch-character-json')
+  fetchCharacterJSON: () => ipcRenderer.invoke('fetch-character-json'),
+  CharacterClass: () => ipcRenderer.invoke('Character-Class')
 })
 

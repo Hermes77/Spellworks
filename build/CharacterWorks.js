@@ -34,6 +34,8 @@ const skills = {
     Stealth: "Dexterity",
     Survival: "Wisdom",
 };
+// window.json.CharacterClass.getInstance();
+// console.log(window.json.CharacterClass.getData);
 function DisplayCharData(data, parentId, entryClass, generateInnerHTML, extraProcessing) {
     const parentElement = document.getElementById(parentId);
     if (!parentElement)

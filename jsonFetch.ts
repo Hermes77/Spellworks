@@ -1,16 +1,51 @@
 import fs from 'fs'
-//TODO List
-// Put the entire json into a class that can be accessed by the entire program
-// Make the class a global variable that can be accessed by the entire program
-// put the fetch and store functions inside class
+import { character } from './Icharacter';
+
 
 declare global {
     interface Window {
         json: {
-            fetchCharacterJSON: () => Promise< any | Response>;
+            fetchCharacterJSON: () => Promise<any | Response>;
+            CharacterClass: { getInstance: () => void; getData: any; };
         }
     }
 }
+
+
+class CharacterClass{ //TODO Make this acessable from other files
+  private static instance: CharacterClass;
+  static data: character;
+
+  private constructor() {
+    try {
+      const response = JSON.parse(fs.readFileSync("character.json", "utf8"));
+      CharacterClass.data = response as character;
+    } catch (error) {
+      console.error("Error fetching JSON:", error);
+      CharacterClass.data = {} as character;
+    }
+  }
+
+  static getInstance(): CharacterClass {
+    if (!CharacterClass.instance) {
+      CharacterClass.instance = new CharacterClass();
+    }
+    return CharacterClass.instance;
+  }
+
+  static set setData(newCharacterData: character) {
+    CharacterClass.data = newCharacterData;
+  }
+
+  static get getData() {
+    return CharacterClass.data;
+  }
+  static set setClassData(newClassData: string) {
+    CharacterClass.data.characterinfo.Class = newClassData;
+  }
+}
+
+CharacterClass.getInstance();
 
 export async function fetchCharacterJSON(callback: (CharacterData: any) => void): Promise<void> {
   try {
@@ -22,4 +57,4 @@ export async function fetchCharacterJSON(callback: (CharacterData: any) => void)
   }
 }
 
-  module.exports = { fetchCharacterJSON };
+  module.exports = { fetchCharacterJSON, CharacterClass };

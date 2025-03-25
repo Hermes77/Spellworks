@@ -37,11 +37,12 @@ function fetchCharSpellData() {
 }
 ;
 fetchCharSpellData();
+//TODO move Function
+// I think this function should be a wrapper function for SearchSpellsCard in database.ts
 function fetchSpellData(spellSearch) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const response = yield window.db.SearchSpellsCard(spellSearch);
-            console.log(response);
             return response;
         }
         catch (error) {

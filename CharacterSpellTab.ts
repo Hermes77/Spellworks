@@ -30,7 +30,6 @@ async function fetchCharSpellData() {
   async function fetchSpellData(spellSearch: string): Promise<Spell | null> { 
     try {
       const response: Spell | Response = await window.db.SearchSpellsCard(spellSearch);
-    console.log(response);
       return response as Spell;
     } catch (error) {
       console.error("Error fetching spell:", error);

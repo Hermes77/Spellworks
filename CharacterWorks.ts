@@ -27,7 +27,8 @@ const skills = {
   Survival: "Wisdom",
 };
 
-
+// window.json.CharacterClass.getInstance();
+// console.log(window.json.CharacterClass.getData);
 
 function DisplayCharData<T>(
   data: Record<string, T>,

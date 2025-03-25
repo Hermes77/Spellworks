@@ -13,7 +13,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('node:path');
 const electronReload = require('electron-reload');
 const { getEntries, FilterSpells, SearchSpellsCard } = require('./database.js');
-const { fetchCharacterJSON } = require('./jsonFetch.js');
+const { fetchCharacterJSON, CharacterClass } = require('./jsonFetch.js');
 electronReload(__dirname);
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -28,6 +28,7 @@ const createWindow = () => {
             preload: path.join(__dirname, 'preload.js')
         }
     });
+    // win.webContents.openDevTools()
     win.loadFile('spellDisplayV2.html');
 };
 // Extend the global Window interface
@@ -49,6 +50,11 @@ ipcMain.handle("Filter-Spells", (_, filterDict) => __awaiter(void 0, void 0, voi
 ipcMain.handle("fetch-character-json", () => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve) => {
         fetchCharacterJSON(resolve);
+    });
+}));
+ipcMain.handle("Character-Class", () => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise((resolve) => {
+        CharacterClass(resolve);
     });
 }));
 app.whenReady().then(() => {

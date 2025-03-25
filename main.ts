@@ -2,7 +2,7 @@ const { app, BrowserWindow,ipcMain } = require('electron')
 const path = require('node:path')
 const electronReload = require('electron-reload');
 const { getEntries,FilterSpells,SearchSpellsCard } = require('./database.js');
-const { fetchCharacterJSON } = require('./jsonFetch.js');
+const { fetchCharacterJSON, CharacterClass } = require('./jsonFetch.js');
 
 electronReload(__dirname);
 
@@ -19,7 +19,7 @@ const createWindow = () => {
         preload: path.join(__dirname, 'preload.js')
     }
   })
-
+  // win.webContents.openDevTools()
   win.loadFile('spellDisplayV2.html')
 }
 
@@ -47,7 +47,11 @@ ipcMain.handle("get-entries", async () => {
     });
   });
 
-
+  ipcMain.handle("Character-Class", async () => {
+    return new Promise((resolve) => {
+      CharacterClass(resolve);
+    });
+  })
 
 
 app.whenReady().then(() => {
